@@ -90,7 +90,7 @@
           <div
             ref="contentWrapperEl"
             class="relative"
-            :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded, 'max-h-[50px]': isSystemUser && !isExpanded }"
+            :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded }"
           >
             <div
               ref="contentWrapperEl"
