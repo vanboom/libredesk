@@ -44,10 +44,10 @@
         <div v-else class="w-8 flex-shrink-0" />
       </template>
 
-      <!-- Bubble Wrapper with max 80% width -->
+      <!-- Bubble Wrapper with max 100% width -->
       <div
-        class="w-4/5"
-        :class="{ 'flex justify-end items-center gap-2': isOutgoing }"
+        class="w-full"
+        :class="{ 'flex justify-end': isOutgoing }"
         style="contain: inline-size"
       >
         <!-- Delete note menu (private notes, appears on hover, left of bubble) -->
@@ -86,7 +86,12 @@
 
             <hr class="mb-2 border-muted-foreground/20" v-if="showEnvelope" />
 
-            <!-- Message Content -->
+          <!-- Message Content -->
+          <div
+            ref="contentWrapperEl"
+            class="relative"
+            :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded }"
+          >
             <div
               ref="contentWrapperEl"
               class="relative"
@@ -271,7 +276,7 @@ import { containsQuoteMarkers } from '@shared-ui/utils/quotedContent.js'
 
 const extendedCssProperties = [...allowedCssProperties, 'transform', 'transform-origin']
 
-const COLLAPSE_THRESHOLD_PX = 400
+const COLLAPSE_THRESHOLD_PX = 300
 
 const contentWrapperEl = ref(null)
 const isExpandable = ref(false)
@@ -362,7 +367,9 @@ const bubbleClasses = computed(() => ({
   'border-destructive': isOutgoing.value && props.message.status === 'failed',
   relative: isOutgoing.value,
   'show-quoted-text': !isOutgoing.value && showQuotedText.value,
-  'hide-quoted-text': !isOutgoing.value && !showQuotedText.value
+  'hide-quoted-text': !isOutgoing.value && !showQuotedText.value,
+  'message-outgoing': isOutgoing.value,
+  'message-incoming': !isOutgoing.value
 }))
 
 const isPrivateMessage = computed(() => isOutgoing.value && props.message.private)
