@@ -131,6 +131,7 @@
       :enableSend="enableSend"
       :handleSend="handleSend"
       :handleSendAndSetStatus="handleSendAndSetStatus"
+      :messageType="messageType"
       @emojiSelect="handleEmojiSelect"
     />
   </div>
