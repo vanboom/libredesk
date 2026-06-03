@@ -90,7 +90,7 @@
           <div
             ref="contentWrapperEl"
             class="relative"
-            :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded }"
+            :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded, 'max-h-[50px]': isSystemUser && !isExpanded }"
           >
             <div
               ref="contentWrapperEl"
@@ -370,7 +370,8 @@ const bubbleClasses = computed(() => ({
   'show-quoted-text': !isOutgoing.value && showQuotedText.value,
   'hide-quoted-text': !isOutgoing.value && !showQuotedText.value,
   'message-outgoing': isOutgoing.value,
-  'message-incoming': !isOutgoing.value
+  'message-incoming': !isOutgoing.value,
+  'message-system': isSystemUser.value
 }))
 
 const isPrivateMessage = computed(() => isOutgoing.value && props.message.private)
