@@ -400,7 +400,8 @@ func initCSAT(db *sqlx.DB, i18n *i18n.I18n) *csat.Manager {
 	return m
 }
 
-// initWS inits websocket hub.
+// 
+inits websocket hub.
 func initWS(user *user.Manager) *ws.Hub {
 	return ws.NewHub(initLogger("ws"), user)
 }
