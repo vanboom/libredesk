@@ -76,6 +76,19 @@
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <div class='flex relative w-full items-center justify-center'>
+                        <!-- <Heart v-if="wsReadyState" class="h-4 w-4 fill-emerald-500 text-emerald-500" /> -->
+                        <Unplug v-if="!wsReadyState" class="h-4 w-4 text-destructive" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{{ wsReadyState ? t('globals.terms.online') : t('globals.terms.offline') }}</p>
+                  </TooltipContent>
+                </Tooltip>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
               <Tooltip>
                 <TooltipTrigger as-child>
                   <NotificationBell />
@@ -127,7 +140,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useStorage } from '@vueuse/core'
 import { RouterView } from 'vue-router'
 import { useUserStore } from './stores/user'
@@ -155,7 +168,7 @@ import { toast as sooner } from 'vue-sonner'
 import Sidebar from '@main/components/sidebar/Sidebar.vue'
 import Command from '@/features/command/CommandBox.vue'
 import CreateConversation from '@/features/conversation/CreateConversation.vue'
-import { Inbox, Shield, FileLineChart, BookUser } from 'lucide-vue-next'
+import { Inbox, Shield, FileLineChart, BookUser, Heart, Unplug } from 'lucide-vue-next'
 import SmallScreenOverlay from '@/components/SmallScreenOverlay.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -220,7 +233,16 @@ watch([() => notificationStore.unreadCount, () => route.fullPath], ([count]) => 
   document.title = count > 0 ? `(${count}) ${base}` : base
 })
 
-initWS()
+const wsClient = initWS()
+console.debug(wsClient)
+const wsReadyState = ref(false)
+let wsStatusCheckInterval = null
+
+const evaluateWsStatus = () => {
+  console.debug("evaluate connection", wsClient, wsClient.socket.readyState, wsClient.isReconnecting)
+  if (!wsClient) return
+  wsReadyState.value = (wsClient.socket.readyState == 1)
+}
 useIdleDetection()
 
 // Unlock audio on first user interaction (browser autoplay policy)
@@ -233,11 +255,16 @@ document.addEventListener('click', unlockAudio)
 document.addEventListener('touchstart', unlockAudio)
 
 onMounted(() => {
+  evaluateWsStatus()
+  wsStatusCheckInterval = setInterval(evaluateWsStatus, 2000)
   initToaster()
   listenViewRefresh()
   initStores()
 })
 
+onUnmounted(() => {
+  if (wsStatusCheckInterval) clearInterval(wsStatusCheckInterval)
+})
 // Initialize data stores
 const initStores = async () => {
   if (!userStore.userID) {
