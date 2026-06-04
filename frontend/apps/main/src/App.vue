@@ -256,7 +256,7 @@ document.addEventListener('touchstart', unlockAudio)
 
 onMounted(() => {
   evaluateWsStatus()
-  wsStatusCheckInterval = setInterval(evaluateWsStatus, 2000)
+  wsStatusCheckInterval = setInterval(evaluateWsStatus, 5000)
   initToaster()
   listenViewRefresh()
   initStores()
