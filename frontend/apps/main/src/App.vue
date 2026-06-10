@@ -234,12 +234,10 @@ watch([() => notificationStore.unreadCount, () => route.fullPath], ([count]) => 
 })
 
 const wsClient = initWS()
-console.debug(wsClient)
 const wsReadyState = ref(false)
 let wsStatusCheckInterval = null
 
 const evaluateWsStatus = () => {
-  console.debug("evaluate connection", wsClient, wsClient.socket.readyState, wsClient.isReconnecting)
   if (!wsClient) return
   wsReadyState.value = (wsClient.socket.readyState == 1)
 }

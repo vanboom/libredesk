@@ -1165,13 +1165,11 @@ export const useConversationStore = defineStore('conversation', () => {
       api.getAllConversations({ page: 1, page_size: 1, filters: filters }),
       api.getMentionedConversations({ page: 1, page_size: 1, filters: filters })
     ])
-    console.debug(unassignedRes)
     // Extract the raw database total row counts from the Go API response
     sidebarCounts.unassigned = unassignedRes?.data?.data?.total || 0
     sidebarCounts.assigned = assignedRes?.data?.data?.total || 0
     sidebarCounts.all = allRes?.data?.data?.total || 0
     sidebarCounts.mentioned = mentionedRes?.data?.data?.total || 0
-    console.debug(sidebarCounts)
   }
 
   // On new conversation uuids, subscribere user to those conversations.
