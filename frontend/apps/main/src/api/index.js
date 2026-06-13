@@ -75,6 +75,7 @@ const getStatuses = () => http.get('/api/v1/statuses')
 const createStatus = (data) => http.post('/api/v1/statuses', data)
 const updateStatus = (id, data) => http.put(`/api/v1/statuses/${id}`, data)
 const deleteStatus = (id) => http.delete(`/api/v1/statuses/${id}`)
+const deleteConversation = (id) => http.delete(`/api/v1/conversations/${id}`)
 const createTag = (data) => http.post('/api/v1/tags', data)
 const updateTag = (id, data) => http.put(`/api/v1/tags/${id}`, data)
 const deleteTag = (id) => http.delete(`/api/v1/tags/${id}`)
@@ -639,6 +640,7 @@ export default {
   createStatus,
   updateStatus,
   deleteStatus,
+  deleteConversation,
   getTeamsCompact,
   getUsersCompact,
   getEmailNotificationSettings,

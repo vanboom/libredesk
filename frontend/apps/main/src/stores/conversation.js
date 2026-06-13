@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { handleHTTPError } from '@shared-ui/utils/http.js'
 import { TYPING_RECEIVE_TIMEOUT } from '@shared-ui/composables/useTypingIndicator.js'
 import { deepMerge } from '@shared-ui/utils/object.js'
@@ -35,6 +35,7 @@ export const useConversationStore = defineStore('conversation', () => {
   const userStore = useUserStore()
   const notificationStore = useNotificationStore()
   const router = useRouter()
+  const route = useRoute()
   const isViewingConversation = (uuid) => router.currentRoute.value.params.uuid === uuid
 
   const selectedUUIDs = ref(new Set())
@@ -718,6 +719,48 @@ export const useConversationStore = defineStore('conversation', () => {
     }
   }
 
+  // VB
+  // Allow user to delete conversation
+  async function deleteConversation () {
+    try {
+      const deletedUuid = conversation.data.uuid
+
+      // 1. Find the position of the item we are about to delete
+      const currentIndex = conversations.data?.findIndex(c => c.uuid === deletedUuid) ?? -1
+
+      // 2. Select the next fallback conversation from the array before deleting
+      let nextConversation = null
+      if (conversations.data && conversations.data.length > 1) {
+         if (currentIndex < conversations.data.length - 1) {
+           nextConversation = conversations.data[currentIndex + 1]
+         } else if (currentIndex > 0) {
+           nextConversation = conversations.data[currentIndex - 1]
+         }
+      }
+      
+      await api.deleteConversation(conversation.data.uuid)
+      
+      Object.assign(conversation, {data: null})
+      resetConversations()
+      reFetchConversationsList()
+      await fetchConversationsList()
+      await fetchSidebarCounts()
+      const listType = route.params.listType || 'unassigned'
+
+      if (nextConversation) {
+        conversation.data = nextConversation
+        router.replace(`/inboxes/${listType}/conversation/${nextConversation.uuid}`)
+      } else {
+        router.replace(`/ inboxes / ${ listType }`)
+      }
+    } catch (error) {
+      emitter.emit(EMITTER_EVENTS.SHOW_TOAST, {
+        variant: 'destructive',
+        description: handleHTTPError(error).message
+      })
+    }
+  }
+
   async function snoozeConversation (snoozeDuration) {
     try {
       await api.updateConversationStatus(conversation.data.uuid, { status: CONVERSATION_DEFAULT_STATUSES.SNOOZED, snoozed_until: snoozeDuration })
@@ -1225,6 +1268,7 @@ export const useConversationStore = defineStore('conversation', () => {
     updateAssignee,
     updatePriority,
     updateStatus,
+    deleteConversation,
     refreshConversationList,
     resetConversations,
     updateConversationLastMessage,

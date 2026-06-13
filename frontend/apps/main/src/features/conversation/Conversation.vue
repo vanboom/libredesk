@@ -36,6 +36,10 @@
             >
               {{ status.label }}
             </DropdownMenuItem>
+	        <DropdownMenuItem class="text-red-600" @click="handleDeleteConversation()">
+                <TrashIcon class="mr-2" size="15" />
+                Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
@@ -82,6 +86,9 @@ import { useEmitter } from '../../composables/useEmitter'
 import { useI18n } from 'vue-i18n'
 import { handleHTTPError } from '@shared-ui/utils/http.js'
 import api from '@main/api'
+import {
+  TrashIcon,
+} from 'lucide-vue-next'
 const conversationStore = useConversationStore()
 const emitter = useEmitter()
 const { t } = useI18n()
@@ -132,5 +139,8 @@ const handleUpdateStatus = (status) => {
     return
   }
   conversationStore.updateStatus(status)
+}
+const handleDeleteConversation = () => {
+  conversationStore.deleteConversation()
 }
 </script>

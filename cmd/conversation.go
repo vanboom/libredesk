@@ -959,3 +959,19 @@ func validateCreateConversationRequest(req createConversationRequest, app *App) 
 
 	return nil
 }
+
+// VB
+// handleDeleteConversation deletes the conversation
+func handleDeleteConversation(r *fastglue.Request) error {
+	var (
+		app   = r.Context.(*App)
+		conversationUUID  = r.RequestCtx.UserValue("uuid").(string)
+	)
+
+	if err := app.conversation.DeleteConversation(conversationUUID); err != nil {
+		app.lo.Error("error deleting conversation", "error", err)
+		return sendErrorEnvelope(r, envelope.NewError(envelope.GeneralError, app.i18n.T("globals.messages.errorSendingMessage"), nil))
+	}
+	return r.SendEnvelope(true)
+	
+}
