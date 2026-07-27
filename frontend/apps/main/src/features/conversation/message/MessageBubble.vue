@@ -135,7 +135,7 @@
                 </button>
               </div>
             </div>
-
+          </div>
             <ImageLightbox
               v-model="inlineLightboxOpen"
               :images="inlineImages"
