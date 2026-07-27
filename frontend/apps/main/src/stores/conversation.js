@@ -813,10 +813,7 @@ export const useConversationStore = defineStore('conversation', () => {
   async function updateAssignee (type, v) {
     try {
       await api.updateAssignee(conversation.data.uuid, type, v)
-<<<<<<< HEAD
       conversation.data[`assigned_${type}_id`] = v.assignee_id
-=======
->>>>>>> 7ea45260 (calculate message sidebar counts and show in the sidebar UI, issue #361)
       await fetchSidebarCounts()
     } catch (error) {
       emitter.emit(EMITTER_EVENTS.SHOW_TOAST, {
@@ -1211,19 +1208,11 @@ export const useConversationStore = defineStore('conversation', () => {
       api.getAllConversations({ page: 1, page_size: 1, filters: filters }),
       api.getMentionedConversations({ page: 1, page_size: 1, filters: filters })
     ])
-<<<<<<< HEAD
-=======
-    console.debug(unassignedRes)
->>>>>>> 7ea45260 (calculate message sidebar counts and show in the sidebar UI, issue #361)
     // Extract the raw database total row counts from the Go API response
     sidebarCounts.unassigned = unassignedRes?.data?.data?.total || 0
     sidebarCounts.assigned = assignedRes?.data?.data?.total || 0
     sidebarCounts.all = allRes?.data?.data?.total || 0
     sidebarCounts.mentioned = mentionedRes?.data?.data?.total || 0
-<<<<<<< HEAD
-=======
-    console.debug(sidebarCounts)
->>>>>>> 7ea45260 (calculate message sidebar counts and show in the sidebar UI, issue #361)
   }
 
   // On new conversation uuids, subscribere user to those conversations.
