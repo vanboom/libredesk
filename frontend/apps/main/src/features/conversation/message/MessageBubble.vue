@@ -92,11 +92,6 @@
             class="relative"
             :class="{ 'max-h-[300px] overflow-hidden': isExpandable && !isExpanded, 'max-h-[50px]': isSystemUser && !isExpanded }"
           >
-            <div
-              ref="contentWrapperEl"
-              class="relative"
-              :class="{ 'max-h-[400px] overflow-hidden': isExpandable && !isExpanded }"
-            >
               <div
                 v-if="message.content_type === 'text'"
                 class="mb-1 native-html whitespace-pre-wrap"
@@ -135,7 +130,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          <!-- div ends here? -->
             <ImageLightbox
               v-model="inlineLightboxOpen"
               :images="inlineImages"

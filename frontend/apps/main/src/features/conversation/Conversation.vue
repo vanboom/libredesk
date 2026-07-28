@@ -36,10 +36,6 @@
             >
               {{ status.label }}
             </DropdownMenuItem>
-	        <DropdownMenuItem class="text-red-600" @click="handleDeleteConversation()">
-                <TrashIcon class="mr-2" size="15" />
-                Delete
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
@@ -51,6 +47,10 @@
           <DropdownMenuContent align="end">
             <DropdownMenuItem @click="downloadTranscript">
               {{ t('conversation.downloadTranscript') }}
+            </DropdownMenuItem>
+            <DropdownMenuItem class="text-red-600" @click="handleDeleteConversation()">
+                <TrashIcon class="mr-2" size="15" />
+                Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
