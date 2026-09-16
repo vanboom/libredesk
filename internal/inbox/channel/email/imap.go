@@ -319,13 +319,11 @@ func (e *Email) fetchAndProcessMessages(ctx context.Context, client *imapclient.
 		} else {
 			if expungeOption {
 				// If deletion is enabled, add the message to the delete list
-				fmt.Printf("Add UID to Expunge %d\n", msgData.uid)
 				uidsToDelete.AddNum(msgData.uid)
 			}
 		}
 
 	}
-	fmt.Printf("UIDs to delete: %s\n", uidsToDelete.String())
 	// Batch delete messages from server
 	if len(uidsToDelete) > 0 && expungeOption {
 		numSet := imap.NumSet(uidsToDelete)
