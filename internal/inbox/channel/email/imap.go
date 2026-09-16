@@ -191,12 +191,12 @@ func (e *Email) fetchAndProcessMessages(ctx context.Context, client *imapclient.
 
 	// Collect messages to process later.
 	type msgData struct {
-		env                *imap.Envelope
-		seqNum             uint32
-		autoReply          bool
-		isLoop             bool
-		extractedMessageID string
-		uid                imap.UID
+		env					*imap.Envelope
+		seqNum				uint32
+		autoReply			bool
+		isLoop				bool
+		extractedMessageID	string
+		uid					imap.UID
 	}
 	var messages []msgData
 
